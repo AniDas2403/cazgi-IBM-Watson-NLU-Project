@@ -7,7 +7,7 @@ function getNLUInstance(){
     let api_key = process.env.API_KEY;
     let api_url = process.env.API_URL;
 
-    const NaturalLanguageUnderstandingV1 = require('ibm-watson/neural-language-understanding/v1');
+    const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
     const { IamAuthenticator } = require('ibm-watson/auth');
 
     const NaturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
@@ -20,6 +20,91 @@ function getNLUInstance(){
     return NaturalLanguageUnderstanding;
 }
 
+function A_E_Url (url,res)
+{
+    const NLU = getNLUInstance();
+    const param = {
+        'url': url,
+        'features':{
+            'emotion':{
+            }
+        }
+    };
+    NLU.analyze(param)
+    .then(R =>{
+        console.log(JSON.stringify(R, space=2));
+        res.send(R.result.emotion.document.emotion);
+    })
+    .catch(E =>{
+        console.log(E)
+        res.send(E)
+    });
+}
+
+function A_S_Url (url,res)
+{
+    const NLU = getNLUInstance();
+    const param = {
+        'url': url,
+        'features':{
+            'sentiment':{
+                
+            }
+        }
+    };
+    NLU.analyze(param)
+    .then(R =>{
+        console.log(JSON.stringify(R, space=2));
+        res.send(R.result.sentiment.document.label);
+    })
+    .catch(E =>{
+        console.log(E)
+        res.send(E)
+    });
+}
+
+function A_E_Text (text,res)
+{
+    const NLU = getNLUInstance();
+    const param = {
+        'html': text,
+        'features':{
+            'emotion':{
+            }
+        }
+    };
+    NLU.analyze(param)
+    .then(R =>{
+        console.log(JSON.stringify(R, space=2));
+        res.send(R.result.emotion.document.emotion);
+    })
+    .catch(E =>{
+        console.log(E)
+        res.send(E)
+    });
+}
+
+function A_S_Text (text,res)
+{
+    const NLU = getNLUInstance();
+    const param = {
+        'html': text,
+        'features':{
+            'sentiment':{
+            }
+        }
+    };
+    NLU.analyze(param)
+    .then(R =>{
+        console.log(JSON.stringify(R, space=2));
+        res.send(R.result.sentiment.document.label);
+    })
+    .catch(E =>{
+        console.log(E)
+        res.send(E)
+    });
+}
+
 app.use(express.static('client'))
 
 const cors_app = require('cors');
@@ -30,23 +115,21 @@ app.get("/",(req,res)=>{
   });
 
 app.get("/url/emotion", (req,res) => {
-
-    return res.send({"happy":"90","sad":"10"});
+    A_E_Url(req.query.url,res);
 });
 
 app.get("/url/sentiment", (req,res) => {
-    return res.send("url sentiment for "+req.query.url);
+    A_S_Url(req.query.url,res);
 });
 
 app.get("/text/emotion", (req,res) => {
-    return res.send({"happy":"10","sad":"90"});
+    A_E_Text(req.query.text,res);
 });
 
 app.get("/text/sentiment", (req,res) => {
-    return res.send("text sentiment for "+req.query.text);
+    A_S_Text(req.query.text,res);
 });
 
 let server = app.listen(8080, () => {
     console.log('Listening', server.address().port)
 })
-
