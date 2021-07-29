@@ -19,7 +19,6 @@ function getNLUInstance(){
     });
     return NaturalLanguageUnderstanding;
 }
-
 function A_E_Url (url,res)
 {
     const NLU = getNLUInstance();
@@ -33,11 +32,11 @@ function A_E_Url (url,res)
     NLU.analyze(param)
     .then(R =>{
         console.log(JSON.stringify(R, space=2));
-        res.send(R.result.emotion.document.emotion);
+        return res.send(R.result.emotion.document.emotion);
     })
     .catch(E =>{
         console.log(E)
-        res.send(E)
+        return res.send(E)
     });
 }
 
@@ -55,11 +54,11 @@ function A_S_Url (url,res)
     NLU.analyze(param)
     .then(R =>{
         console.log(JSON.stringify(R, space=2));
-        res.send(R.result.sentiment.document.label);
+        return res.send(R.result.sentiment.document.label);
     })
     .catch(E =>{
         console.log(E)
-        res.send(E)
+        return res.send(E)
     });
 }
 
@@ -76,11 +75,11 @@ function A_E_Text (text,res)
     NLU.analyze(param)
     .then(R =>{
         console.log(JSON.stringify(R, space=2));
-        res.send(R.result.emotion.document.emotion);
+        return res.send(R.result.emotion.document.emotion);
     })
     .catch(E =>{
         console.log(E)
-        res.send(E)
+        return res.send(E)
     });
 }
 
@@ -97,11 +96,11 @@ function A_S_Text (text,res)
     NLU.analyze(param)
     .then(R =>{
         console.log(JSON.stringify(R, space=2));
-        res.send(R.result.sentiment.document.label);
+        return res.send(R.result.sentiment.document.label);
     })
     .catch(E =>{
         console.log(E)
-        res.send(E)
+        return res.send(E)
     });
 }
 
