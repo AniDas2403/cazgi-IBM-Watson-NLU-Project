@@ -2,7 +2,6 @@ import './bootstrap.min.css';
 import './App.css';
 import EmotionTable from './EmotionTable.js';
 import React from 'react';
-import axios from 'axios';
 
 class App extends React.Component {
   state = {innercomp:<textarea rows="4" cols="50" id="textinput"/>,
@@ -42,7 +41,7 @@ class App extends React.Component {
     } else {
       url = url+"/text/sentiment?text="+document.getElementById("textinput").value;
     }
-    axios.get(url).then((response)=>{
+    fetch(url).then((response)=>{
         response.text().then((data)=>{
         this.setState({sentimentOutput:data});
         let output = data;
@@ -66,7 +65,7 @@ class App extends React.Component {
     } else {
       url = url+"/text/emotion/?text="+document.getElementById("textinput").value;
     }
-    axios.get(url).then((response)=>{
+    fetch(url).then((response)=>{
       response.json().then((data)=>{
       this.setState({sentimentOutput:<EmotionTable emotions={data}/>});
   })})  ;
